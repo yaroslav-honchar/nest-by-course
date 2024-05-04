@@ -1,18 +1,24 @@
-import { prop } from '@typegoose/typegoose';
+import { IsString, IsNotEmpty, IsNumber, IsMongoId, Max, Min } from 'class-validator';
 
 export class CreateReviewDto {
-    @prop()
+    @IsString()
     name: string;
 
-    @prop()
+    @IsString()
     title: string;
 
-    @prop()
+    @IsString()
     description: string;
 
-    @prop()
+    @Max(5, {
+        message: 'Rating can not be bigger than 5',
+    })
+    @Min(1, {
+        message: 'Rating can not be less than 1',
+    })
+    @IsNumber()
     rating: number;
 
-    @prop()
+    @IsMongoId()
     productId: string;
 }

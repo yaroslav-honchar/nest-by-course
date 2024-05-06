@@ -5,8 +5,14 @@ import { AppModule } from './../src/app.module';
 import { CreateReviewDto } from '../src/review/dto/create-review.dto';
 import { Types, disconnect } from 'mongoose';
 import { REVIEW_NOT_FOUND } from '../src/review/review.constants';
+import { AuthDto } from '../src/auth/dto/auth.dto';
 
 const productId = new Types.ObjectId().toHexString();
+
+const authDto: AuthDto = {
+    login: 'dart.vader@gmail.com',
+    password: 'qwe123QWE!@#',
+};
 
 const testDto: CreateReviewDto = {
     name: 'Test',
@@ -19,6 +25,7 @@ const testDto: CreateReviewDto = {
 describe('ReviewController (e2e)', () => {
     let app: INestApplication;
     let createdId: string;
+    let auth_token: string;
 
     beforeEach(async () => {
         const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -27,6 +34,9 @@ describe('ReviewController (e2e)', () => {
 
         app = moduleFixture.createNestApplication();
         await app.init();
+
+        const res = await request(app.getHttpServer()).post('/auth/login').send(authDto);
+        auth_token = res.body.access_token;
     });
 
     it('/review/create (POST) - success', async () => {
@@ -46,8 +56,6 @@ describe('ReviewController (e2e)', () => {
                 rating: 0,
             })
             .expect(400);
-
-        console.log(res.body);
 
         return res;
     });
@@ -75,12 +83,18 @@ describe('ReviewController (e2e)', () => {
     it('/review/:id (DELETE) - success', () => {
         return request(app.getHttpServer())
             .delete('/review/' + createdId)
+            .set({
+                Authorization: `Bearer ${auth_token}`,
+            })
             .expect(200);
     });
 
     it('/review/:id (DELETE) - failed', () => {
         return request(app.getHttpServer())
             .delete('/review/' + new Types.ObjectId().toHexString())
+            .set({
+                Authorization: `Bearer ${auth_token}`,
+            })
             .expect(404, {
                 statusCode: 404,
                 message: REVIEW_NOT_FOUND,

@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty, IsNumber, IsMongoId, Max, Min } from 'class-validator';
+import { IsString, IsNumber, IsMongoId, Max, Min } from 'class-validator';
 
 export class CreateReviewDto {
     @IsString()

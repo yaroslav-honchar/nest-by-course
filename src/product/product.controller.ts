@@ -19,6 +19,7 @@ import {
     PRODUCT_NOT_FOUND_ERROR,
     UPDATE_PRODUCT_NOT_FOUND_ERROR,
 } from './product.constants';
+import { IdValidationPipe } from '../pipes/ad-validation.pipe';
 
 @Controller('product')
 export class ProductController {
@@ -31,7 +32,7 @@ export class ProductController {
     }
 
     @Get(':id')
-    async get(@Param('id') id: string) {
+    async get(@Param('id', IdValidationPipe) id: string) {
         const product = await this.productService.findById(id);
         if (!product) {
             throw new NotFoundException(PRODUCT_NOT_FOUND_ERROR);
@@ -41,7 +42,7 @@ export class ProductController {
     }
 
     @Delete(':id')
-    async delete(@Param('id') id: string) {
+    async delete(@Param('id', IdValidationPipe) id: string) {
         const deletedProduct = await this.productService.deleteById(id);
         if (!deletedProduct) {
             throw new NotFoundException(DELETE_PRODUCT_NOT_FOUND_ERROR);
@@ -49,7 +50,7 @@ export class ProductController {
     }
 
     @Patch(':id')
-    async patch(@Param('id') id: string, @Body() dto: CreateProductDto) {
+    async patch(@Param('id', IdValidationPipe) id: string, @Body() dto: CreateProductDto) {
         const product = await this.productService.updateById(id, dto);
         if (!product) {
             throw new NotFoundException(UPDATE_PRODUCT_NOT_FOUND_ERROR);

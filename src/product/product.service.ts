@@ -46,16 +46,26 @@ export class ProductService {
                         from: 'Review',
                         localField: '_id',
                         foreignField: 'productId',
-                        as: 'review',
+                        as: 'reviews',
                     },
                 },
                 {
                     $addFields: {
                         reviewCount: {
-                            $size: '$review',
+                            $size: '$reviews',
                         },
                         reviewAvg: {
-                            $avg: '$review.rating',
+                            $avg: '$reviews.rating',
+                        },
+                        reviews: {
+                            $function: {
+                                body: `function (review) {
+                                    review.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+                                    return review;
+                                }`,
+                                args: ['$reviews'],
+                                lang: 'js',
+                            },
                         },
                     },
                 },

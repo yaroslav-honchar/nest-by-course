@@ -39,7 +39,7 @@ describe('ReviewController (e2e)', () => {
         auth_token = res.body.access_token;
     });
 
-    it('/review/create (POST) - success', async () => {
+    it('(POST) /review/create - success', async () => {
         const res = await request(app.getHttpServer()).post('/review/create').send(testDto).expect(201);
 
         createdId = res.body._id;
@@ -48,7 +48,7 @@ describe('ReviewController (e2e)', () => {
         return res;
     });
 
-    it('/review/create (POST) - failed', async () => {
+    it('(POST) /review/create - failed', async () => {
         const res = await request(app.getHttpServer())
             .post('/review/create')
             .send({
@@ -60,7 +60,7 @@ describe('ReviewController (e2e)', () => {
         return res;
     });
 
-    it('/review/by-product/:productId (GET) - success', async () => {
+    it('(GET) /review/by-product/:productId - success', async () => {
         const res = await request(app.getHttpServer())
             .get('/review/by-product/' + productId)
             .expect(200);
@@ -70,7 +70,7 @@ describe('ReviewController (e2e)', () => {
         return res;
     });
 
-    it('/review/by-product/:productId (GET) - failed', async () => {
+    it('(GET) /review/by-product/:productId - failed', async () => {
         const res = await request(app.getHttpServer())
             .get('/review/by-product/' + new Types.ObjectId().toHexString())
             .expect(200);
@@ -80,7 +80,7 @@ describe('ReviewController (e2e)', () => {
         return res;
     });
 
-    it('/review/:id (DELETE) - success', () => {
+    it('(DELETE) /review/:id - success', () => {
         return request(app.getHttpServer())
             .delete('/review/' + createdId)
             .set({
@@ -89,7 +89,7 @@ describe('ReviewController (e2e)', () => {
             .expect(200);
     });
 
-    it('/review/:id (DELETE) - failed', () => {
+    it('(DELETE) /review/:id - failed', () => {
         return request(app.getHttpServer())
             .delete('/review/' + new Types.ObjectId().toHexString())
             .set({

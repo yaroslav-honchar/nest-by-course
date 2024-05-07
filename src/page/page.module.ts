@@ -1,19 +1,21 @@
 import { Module } from '@nestjs/common';
-import { TopPageController } from './top-page.controller';
+import { PageController } from './page.controller';
 import { TypegooseModule } from 'nestjs-typegoose';
-import { TopPageModel } from './top-page.model';
+import { PageModel } from './page.model';
+import { PageService } from './page.service';
 
 @Module({
-    controllers: [TopPageController],
+    controllers: [PageController],
     imports: [
         TypegooseModule.forFeature([
             {
-                typegooseClass: TopPageModel,
+                typegooseClass: PageModel,
                 schemaOptions: {
                     collection: 'TopPage',
                 },
             },
         ]),
     ],
+    providers: [PageService],
 })
-export class TopPageModule {}
+export class PageModule {}

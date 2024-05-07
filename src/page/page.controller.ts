@@ -1,4 +1,15 @@
-import { Body, Controller, Delete, Get, NotFoundException, Param, Patch, Post } from '@nestjs/common';
+import {
+    Body,
+    Controller,
+    Delete,
+    Get,
+    NotFoundException,
+    Param,
+    Patch,
+    Post,
+    UsePipes,
+    ValidationPipe,
+} from '@nestjs/common';
 import { FindPageDto } from './dto/find-page.dto';
 import { CreatePageDto } from './dto/create-page.dto';
 import { PageService } from './page.service';
@@ -41,9 +52,10 @@ export class PageController {
 
     @Delete(':id')
     async delete(@Param('id', IdValidationPipe) id: string) {
-        return this.pageService.delete(id);
+        return this.pageService.deleteById(id);
     }
 
+    @UsePipes(new ValidationPipe())
     @Post('find')
     async find(@Body() dto: FindPageDto) {
         return this.pageService.find(dto);

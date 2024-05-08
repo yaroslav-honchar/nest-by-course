@@ -11,7 +11,7 @@ import { PageService } from './page.service';
             {
                 typegooseClass: PageModel,
                 schemaOptions: {
-                    collection: 'TopPage',
+                    collection: 'Page',
                 },
             },
         ]),
